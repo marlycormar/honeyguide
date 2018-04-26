@@ -80,16 +80,6 @@ services:
     volumes:
       - redis_data:/data
 
-  nginx:
-    image: redash/nginx:latest
-    ports:
-      - "8080:80"
-    depends_on:
-      - redash
-    links:
-      - redash:redash
-    restart: always
-
   mysql-server:
     image: mysql
     restart: always
