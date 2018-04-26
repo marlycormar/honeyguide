@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - quail_data:/home/hcvprod/quailroot
+      - quail_data:/home/icare/quailroot
     build:
       context: .
       dockerfile: Dockerfile
@@ -43,22 +43,10 @@ services:
       REDASH_PASSWORD: ${REDASH_PASSWORD}
     restart: always
 
-  pg_admin:
-    image: fenglc/pgadmin4
-    ports:
-      - "5050:5050"
-    environment:
-      DEFAULT_USER: ${PG_ADMIN_DEFAULT_USER}
-      DEFAULT_PASSWORD: ${PG_ADMIN_DEFAULT_PASS}
-    volumes:
-      - pg_admin_data:/var/lib/pgadmin
-      - ./init_sql:/docker-entrypoint-initdb.d/
-    restart: always
-
   redash:
     image: redash/redash:latest
     volumes:
-      - quail_data:/hcvprod
+      - quail_data:/icare
     command: server
     depends_on:
       - postgres
@@ -101,6 +89,7 @@ services:
     links:
       - redash:redash
     restart: always
+
   mysql-server:
     image: mysql
     restart: always
