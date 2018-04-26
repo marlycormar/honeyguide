@@ -3,7 +3,6 @@ FROM python:3-stretch
 
 ARG CAPPY_CLONE_URL
 ARG QUAIL_CLONE_URL
-ARG PGPASSWORD
 
 RUN apt-get update
 RUN yes | apt-get install vim pwgen sqlite3 cron
