@@ -31,7 +31,7 @@ USER icare
 
 RUN quail install quailroot
 
-COPY --chown=icare:icare quail_user_script.sh quail_run_script.sh fix_quail_unique_field.sql ./
+COPY --chown=icare:icare quail_user_script.sh quail_run_script.sh fix_quail_unique_field.sql sqlite_to_mysql.py create_and_populate_table.py ./
 
 USER root
 
