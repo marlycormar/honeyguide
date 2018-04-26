@@ -11,7 +11,7 @@
 version: '3'
 services:
   quail:
-    image: quail:hcv
+    image: quail
     command: cron -f
     depends_on:
       - postgres
@@ -103,6 +103,5 @@ services:
       - "3306:3306"
 volumes:
   postgres_data:
-  pg_admin_data:
   quail_data:
   redis_data:
