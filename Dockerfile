@@ -33,6 +33,8 @@ RUN quail install quailroot
 
 COPY --chown=icare:icare quail_user_script.sh quail_run_script.sh fix_quail_unique_field.sql sqlite_to_mysql.py create_and_populate_table.py ./
 
+ARG TOKEN
+ARG REDCAP_URL
 RUN /home/icare/quail_run_script.sh
 
 USER root
