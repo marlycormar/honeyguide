@@ -23,7 +23,6 @@ services:
       args:
         CAPPY_CLONE_URL: ${PIP_CAPPY_CLONE_URL}
         QUAIL_CLONE_URL: ${PIP_QUAIL_CLONE_URL}
-        PGPASSWORD: ${POSTGRES_PASSWORD}
         MINUTE: ${QUAIL_MINUTE}
         HOUR: ${QUAIL_HOUR}
         TOKEN: ${QUAIL_TOKEN}
