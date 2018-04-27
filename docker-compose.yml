@@ -26,6 +26,8 @@ services:
         PGPASSWORD: ${POSTGRES_PASSWORD}
         MINUTE: ${QUAIL_MINUTE}
         HOUR: ${QUAIL_HOUR}
+        TOKEN: ${QUAIL_TOKEN}
+        REDCAP_URL: ${QUAIL_REDCAP_URL}
     environment:
       TOKEN: ${QUAIL_TOKEN}
       REDCAP_URL: ${QUAIL_REDCAP_URL}
