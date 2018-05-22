@@ -3,15 +3,14 @@ FROM python:3-stretch
 
 ARG CAPPY_CLONE_URL
 ARG QUAIL_CLONE_URL
-ARG PGPASSWORD
 
 RUN apt-get update
-RUN yes | apt-get install pgloader postgresql-client vim pwgen sqlite3 cron
+RUN yes | apt-get install vim pwgen sqlite3 cron
 
-RUN useradd hcvprod
+RUN useradd icare
 
-WORKDIR /home/hcvprod
-RUN chown -R hcvprod /home/hcvprod
+WORKDIR /home/icare
+RUN chown -R icare /home/icare
 
 RUN git clone $CAPPY_CLONE_URL
 RUN git clone $QUAIL_CLONE_URL
@@ -25,17 +24,18 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # remember the hour ranges from 0-23 hours
 ARG MINUTE
 ARG HOUR
-RUN printf "%s %s * * * bash /home/hcvprod/quail_user_script.sh > /proc/1/fd/1 2> /proc/1/fd/2\n" $MINUTE $HOUR \
+RUN printf "%s %s * * * bash /home/icare/quail_user_script.sh > /proc/1/fd/1 2> /proc/1/fd/2\n" $MINUTE $HOUR \
     | crontab
 
-USER hcvprod
+USER icare
 
 RUN quail install quailroot
 
-RUN printf "*:*:*:postgres:%s" $PGPASSWORD > /home/hcvprod/.pgpass
-RUN chmod 0600 /home/hcvprod/.pgpass
+COPY --chown=icare:icare quail_user_script.sh quail_run_script.sh fix_quail_unique_field.sql sqlite_to_mysql.py create_and_populate_table.py ./
 
-COPY --chown=hcvprod:hcvprod quail_user_script.sh quail_run_script.sh fix_quail_unique_field.sql ./
+ARG TOKEN
+ARG REDCAP_URL
+RUN /home/icare/quail_run_script.sh
 
 USER root
 

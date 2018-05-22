@@ -11,21 +11,22 @@
 version: '3'
 services:
   quail:
-    image: quail:hcv
+    image: quail
     command: cron -f
     depends_on:
       - postgres
     volumes:
-      - quail_data:/home/hcvprod/quailroot
+      - quail_data:/home/icare/quailroot
     build:
       context: .
       dockerfile: Dockerfile
       args:
         CAPPY_CLONE_URL: ${PIP_CAPPY_CLONE_URL}
         QUAIL_CLONE_URL: ${PIP_QUAIL_CLONE_URL}
-        PGPASSWORD: ${POSTGRES_PASSWORD}
         MINUTE: ${QUAIL_MINUTE}
         HOUR: ${QUAIL_HOUR}
+        TOKEN: ${QUAIL_TOKEN}
+        REDCAP_URL: ${QUAIL_REDCAP_URL}
     environment:
       TOKEN: ${QUAIL_TOKEN}
       REDCAP_URL: ${QUAIL_REDCAP_URL}
@@ -43,22 +44,10 @@ services:
       REDASH_PASSWORD: ${REDASH_PASSWORD}
     restart: always
 
-  pg_admin:
-    image: fenglc/pgadmin4
-    ports:
-      - "5050:5050"
-    environment:
-      DEFAULT_USER: ${PG_ADMIN_DEFAULT_USER}
-      DEFAULT_PASSWORD: ${PG_ADMIN_DEFAULT_PASS} 
-    volumes:
-      - pg_admin_data:/var/lib/pgadmin
-      - ./init_sql:/docker-entrypoint-initdb.d/
-    restart: always
-
   redash:
     image: redash/redash:latest
     volumes:
-      - quail_data:/hcvprod
+      - quail_data:/icare
     command: server
     depends_on:
       - postgres
@@ -92,17 +81,18 @@ services:
     volumes:
       - redis_data:/data
 
-  nginx:
-    image: redash/nginx:latest
-    ports:
-      - "8080:80"
-    depends_on:
-      - redash
-    links:
-      - redash:redash
+  mysql-server:
+    image: mysql
     restart: always
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - ./mysql_conf.d:/etc/mysql/conf.d
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
 volumes:
   postgres_data:
-  pg_admin_data:
   quail_data:
   redis_data:
